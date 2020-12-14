@@ -1,0 +1,244 @@
+\documentclass[a4paper]{article}
+\usepackage[margin=2cm]{geometry}
+\usepackage{times,graphicx,amsmath,amssymb,hyperref,pdflscape,natbib}
+
+\newcommand{\Div}{{\boldsymbol{\nabla}}\cdot}
+\newcommand{\Grad}{{\boldsymbol{\nabla}}}
+\newcommand{\delsq}{\nabla^2}
+\newcommand{\diff}[2]{\frac{\textrm{d}{#1}}{\textrm{d}{#2}}}
+\newcommand{\pdiff}[2]{\frac{\partial{#1}}{\partial{#2}}}
+\newcommand{\ldiff}[2]{\frac{\mathrm{D}{#1}}{\mathrm{D}{#2}}}
+\newcommand{\pdifftwo}[2]{\frac{\partial^2{#1}}{\partial{#2}^2}}
+\newcommand{\strr}{\dot{\varepsilon}}
+\newcommand{\infd}{\textrm{d}}
+\newcommand{\xvec}{\boldsymbol{x}}
+\newcommand{\ihat}{\boldsymbol{i}}
+\newcommand{\jhat}{\boldsymbol{j}}
+\newcommand{\khat}{\boldsymbol{k}}
+\newcommand{\vel}{\boldsymbol{v}}
+\newcommand{\Pe}{\text{Pe}}
+
+% for commenting:
+\newcommand{\rfk}[1]{\noindent$\blacktriangleright$ \emph{{\bf RFK:} #1} \\*}
+\newcommand{\mb}[1]{\noindent$\blacktriangleright$ \emph{{\bf MB:} #1} \\*}
+\newcommand{\tk}[1]{\noindent$\blacktriangleright$ \emph{{\bf TK:} #1} \\*}
+\newcommand{\at}[1]{\noindent$\blacktriangleright$ \emph{{\bf AT:} #1} \\*}
+
+\begin{document}
+
+\section{Coordinate system}
+
+Take a right-handed, Cartesian coordinate system with the
+$x$-direction (unit vector $\ihat$) as the plate-spreading direction
+of the mid-ocean ridge, the $y$-direction (unit vector $\jhat$) as
+along the ridge segments, and the $z$-direction pointing downward with
+$z=0$ at the surface of the solid Earth (unit vector $\khat$). 
+
+\section{Governing equations}
+
+The equations are
+\begin{align}
+  \label{eq:gov_dimensional}
+  \Div\vel &= 0,\\
+  \Grad P - \Div 2\eta\strr &= 0,\\
+  \rho c_P \left( \frac{\partial T}{\partial t} + \Div \vel T \right) - k\delsq T &= 0,\\
+  \ldiff{a}{t} + \frac{\beta\lambda}{c\gamma}\left(\sigma_{ij}\strr_{ij}\right) a^2 - K_g\frac{a^{1-p}}{p}\textrm{e}^{-(Q_g + PV_g)/(RT)} &= 0.
+\end{align}
+
+
+where $\strr = (\Grad\vel + (\Grad\vel)^T)/2$ is the strain rate
+tensor, $T$ is the potential temperature, $\eta$ is the viscosity.
+The table below displays the symbols, units and test values relating
+to the grain evolution equation.
+
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{llll}
+    Symbol & units & Description & Test values \\
+    \hline
+    $a$ & m & Grain size & - \\
+    $\beta$ & - & Fraction of strain-rate by dislocations & $-$ \\
+    $\lambda$ & - & Fraction of dislocation work to grain-size reduction & $1$  \\
+    $c$ & - & Geometric factor & $3$\\
+    $\gamma$ & Kg s$^{-2}$  & Surface energy at grain-grain contacts & $1$ \\
+    $\sigma_{ij}$ & Pa & Solid stress tensor & -  \\
+    $\strr_{ij}$ & s$^{-1}$ & Solid strain-rate tensor & - \\
+    $K_g$ & m$^{p}$ s$^{-1}$ & Grain-growth prefactor & $10^{-5}$ \\
+    $p$ & - & Grain-growth exponent & 3 \\
+    $Q_g$ & Pa m$^{3}$ & Grain-growth activation energy & $3.5\times10^5$ \\
+    $T$ & K & Temperature & - \\
+    $P$ & Pa & Pressure & - \\
+    $V_g$ & m$^3$/mol & Activation volume for grain growth & - \\
+    \hline
+  \end{tabular}
+  \caption{Symbols, units and test values for grain evolution equation.}
+  \label{tab:grainsymbols}
+\end{table}
+
+\section{Mantle rheology}
+\subsection{Diffusion \& dislocation creep viscosity}
+
+A general form of constitutive law for diffusion and dislocation creep
+is 
+\begin{equation}
+  \label{eq:constit}
+  \strr = A a^{-m}\sigma^n\exp\left(\frac{E^* + PV^*}{RT}\right).
+\end{equation}
+Solving for stress $\sigma$ gives
+\begin{equation}
+  \label{eq:3}
+  \sigma = A^{-1/n}a^{m/n}\exp\left(\frac{E^* + PV^*}{nRT}\right)\strr^{1/n}.
+\end{equation}
+Rewriting this in terms of the second invariant of the strain rate
+tensor gives
+\begin{equation}
+  \label{eq:2}
+  \sigma_{ij} = A^{-1/n}a^{m/n}\exp\left(\frac{E^* + PV^*}{nRT}\right)\strr^{(1-n)/n}_{II}\strr_{ij}.
+\end{equation}
+Hence we have a viscosity given by
+\begin{equation}
+  \label{eq:4}
+  \eta = A^{-1/n}a^{m/n}\exp\left(\frac{E^* + PV^*}{nRT}\right)\strr^{(1-n)/n}_{II}.
+\end{equation}
+
+For diffusion creep $n=1$ and $m=3$ while for dislocation creep,
+$n\approx3.5$ and $m=0$
+
+\subsection{Plasticity}
+
+A maximum work-rate is prescribed by an effective viscosity based on
+the Drucker-Prager yield criteria,
+\begin{equation}
+  \eta_{B} = \frac{C \cos \phi + P \sin \phi}{\strr_{II}}
+\end{equation}
+where $C$ is the cohesion, $P$ is the pressure and $\phi$ is the friction angle.
+
+\subsection{Combining viscosities}
+
+Diffusion, dislocation and plastic strain-rates are combined
+additively (Maxwell material).  Thus
+\begin{equation}
+  \strr_\text{eff} = \strr^D + \strr^L + \strr^B.
+\end{equation}
+where $D$, $L$, $B$ denote diffusion, dislocation, and plastic
+rheologies.
+
+This may be rewritten in terms of $\eta$, such that
+\begin{equation}
+  \eta_\text{eff} = \left( \frac{1}{\eta^D} + \frac{1}{\eta^L} + \frac{1}{\eta^B} \right)^{-1}.
+\end{equation}
+
+The fraction of strain-rate that is associated with dislocation creep may be written in terms of the viscosity as
+\begin{equation}
+  \beta = \frac{\frac{1}{\eta^L}}{\left( \frac{1}{\eta^D} + \frac{1}{\eta^L} + \frac{1}{\eta^B} \right)}.
+  \label{eq:beta1}
+\end{equation}
+
+\subsection{Grain boundary sliding}
+
+The constitutive law for diffusion and dislocation creep, equation \ref{eq:4}, applies to grain boundary sliding.
+For grain boundary sliding we have $m =2.9$ ans $n=0.7$ from Hansen et al. (2011).
+The superscript $G$ will refer to grain boundary sliding.
+Note grain boundary sliding means dislocation accommodated grain boundary sliding in this work.
+
+We assume that Diffusion, dislocation and plastic strain-rates are combined additively, and that dislocation and grain boundary sliding strain-rates are combined harmonically.
+Thus
+\begin{equation}
+  \strr_\text{eff} = \strr^D +  \left( \frac{1}{\strr^L} +\frac{1}{\strr^G} \right)^{-1} + \strr^B.
+\end{equation}
+
+We continue the assumption that each process has an associated viscosity that may be written as $\strr^k = \sigma / 2 \eta^k$, where $k = G, L, D, B$.
+Thus, the aggregate viscosity derived from the strain-rate is
+\begin{equation}
+  \eta_\text{eff} = \left( \frac{1}{\eta^D} + \frac{1}{\eta^B} + \frac{1}{\eta^L + \eta^G} \right)^{-1}.
+\end{equation}
+
+As before, equation \ref{eq:beta1}, we formulate the strain-rate associated with deformation i.e. grain destruction/division in terms of the viscosity.
+The definition of strain-rate that we have used implies that dislocation creep and grain boundary sliding comprise a coupled rate-limiting process.
+Therefore, both dislocation creep and grain boundary sliding are used to break grains.
+Such a formalism may be reasonable as both mechanisms rely on the motion of dislocations to accommodate strain.
+Thus, the fraction of strain-rate that is associated with grain size reduction may be written as 
+
+ \begin{equation}
+  \beta = \frac{\eta_{eff}}{\eta^L + \eta^G}
+  \label{eq:beta2}
+\end{equation}
+ 
+
+Typical parameter values for the viscosity terms are given in table~\ref{tab:viscsymbols}.
+Conversion from an experimental prefactor to appropriate S.I units for viscosity is achieved by
+ \begin{equation}
+  A_{0,k} = \frac{3^{(n+1)/2}}{2^{1-n}}10^{-6(m+n)}A_k
+  \label{eq:convert}
+\end{equation}
+such that the viscosity may be written as 
+\begin{equation*}
+  \eta = 0.5A_0^{-1/n}a^{m/n}\exp\left(\frac{E^* + PV^*}{nRT}\right)\strr^{(1-n)/n}_{II}.
+\end{equation*}
+
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{llll}
+    Symbol & units & Description & Values \\
+    \hline
+    $A_L$ & sec$^{-1}$ MPa$^{-n}$ & Dislocation prefactor &  $1.1 \times10^5$ \\
+    $E_L$ & J/mol & Dislocation activation energy & $5.3 \times10^5$ \\
+    $V_L$ & m$^3/$mol & Dislocation activation volume & $1.7 \times10^{-5}$ \\
+    $n_L$ & - & Dislocation Stress exponent & $3.5$ \\
+    $m_L$ & - & Dislocation Grain-size exponent & $0$ \\
+    $A_D$ & $\mu$m$^3$ sec$^{-1}$ MPa$^{-1}$ & Diffusion prefactor &  $1.59 \times10^9$ \\
+    $E_D$ & J/mol & Diffusion activation energy & $3.75 \times10^5$ \\
+    $V_D$ & m$^3$/mol & Diffusion activation volume & $6 \times10^{-6}$ \\
+    $n_D$ & - & Diffusion Stress exponent & $1$ \\
+    $m_D$ & - & Diffusion Grain-size exponent & $3$ \\
+    $A_G$ & $\mu$m$^3$ sec$^{-1}$ MPa$^{-1}$ & GBS prefactor &  $10^4.8$ \\
+    $E_G$ & J/mol & GBS activation energy & $4.45 \times10^5$ \\
+    $V_G$ & m$^3$/mol & GBS activation volume & $1.8 \times10^{-5}$ \\
+    $n_G$ & - & GBS Stress exponent & $2.9$ \\
+    $m_G$ & - & GBS Grain-size exponent & $0.7$ \\
+    $C$ & Pa & Cohesion & $5 \times10^7$\\
+    $\phi$ & degrees & Friction angle & $30$ \\
+    \hline
+  \end{tabular}
+  \caption{Symbols, units and values for viscosity.}
+  \label{tab:viscsymbols}
+\end{table}
+
+
+\section{Nondimensionalisation}
+
+Use the following scalings: $\vel = U_0\vel'$, $\xvec = H\xvec'$,
+$\eta = \eta_0\eta'$, $P=\eta_0U_0/HP'$, $a = a_0 a'$ and $T = T_0T'$. 
+Let $A = \ln a'$. Substituting
+and dropping primes gives
+\begin{align}
+  \label{eq:gov_dimensional}
+  \Div\vel &= 0,\\
+  \Grad P - \Div \eta(\Grad\vel + (\Grad\vel)^T) &= 0,\\
+  \left( \frac{\partial T}{\partial t} + \Div \vel T \right) - \Pe^{-1}\delsq T &= 0,\\
+  \ldiff{A}{t} +
+  \mathcal{D}\strr_{II}^2\eta_\text{eff}\beta\exp\left(A\right) - 
+  \mathcal{G}\exp\left(\frac{-(Q_g + PV_g)}{RT} - Ap \right) &= 0.
+\end{align}
+where 
+\begin{equation}
+  \label{eq:1}
+  \Pe = \frac{\rho c_pU_0H}{\kappa}
+\end{equation}
+is the Peclet number,
+\begin{equation}
+  \label{eq:2}
+  \mathcal{D} = \frac{\lambda\eta_0U_0a_0}{c\gamma H}
+\end{equation}
+is the destruction coeffiecient,
+\begin{equation}
+  \label{eq:3}
+  \mathcal{G} = \frac{K_gH}{pa_0^pU_0}
+\end{equation}
+is the growth coeffiecient.
+
+%\bibliographystyle{plainnat}
+%\bibliography{notes}
+\end{document}
+
