@@ -123,7 +123,7 @@ PetscErrorCode ReportParams(AppCtx *user)
   PetscFunctionBegin;
   ierr = MPI_Comm_size(user->comm,&cs);
   ierr = PetscGetDate(date,30);CHKERRQ(ierr);
-  ierr = PetscOptionsGetAll(&options_string);CHKERRQ(ierr);
+  ierr = PetscOptionsGetAll(NULL,&options_string);CHKERRQ(ierr);
 
   PetscPrintf(comm,"-------------------mor: %s-----------------\n",&(date[0]));
   PetscPrintf(comm,"Number of MPI processes: %d\n",cs);

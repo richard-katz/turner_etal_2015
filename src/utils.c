@@ -61,7 +61,7 @@ PetscReal HalfSpaceCooling(PetscReal x, PetscReal z, Parameter *p)
   V = p->U0/1e2/SEC_PER_YR;      // velocity in units of m/s
   x *= p->height*1e3;            // Distance in m
   z *= p->height*1e3;            // Depth in m  
-  return erf(z/(2*sqrt(p->K*abs(x)/V)));
+  return erf(z/(2*sqrt(p->K*fabs(x)/V)));
 }
 
 /*---------------------------------------------------------------------*/
@@ -97,9 +97,10 @@ PetscErrorCode CreateDataStructures(AppCtx *user)
 
   /* set up solution and residual vectors */
   dofs = (PetscInt)(sizeof(Field)/sizeof(PetscReal));
-  ierr = DMDACreate2d(user->comm,DMDA_BOUNDARY_NONE,DMDA_BOUNDARY_NONE,
+  ierr = DMDACreate2d(user->comm,DM_BOUNDARY_NONE,DM_BOUNDARY_NONE,
 		      DMDA_STENCIL_BOX,p->ni,p->nj,PETSC_DECIDE,PETSC_DECIDE,
 		      dofs,2,PETSC_NULL,PETSC_NULL,&user->da);CHKERRQ(ierr);
+  ierr = DMSetUp(user->da);CHKERRQ(ierr);
   ierr = DMDASetFieldName(user->da,0,"U");CHKERRQ(ierr);
   ierr = DMDASetFieldName(user->da,1,"W");CHKERRQ(ierr);
   ierr = DMDASetFieldName(user->da,2,"P");CHKERRQ(ierr);
@@ -120,9 +121,10 @@ PetscErrorCode CreateDataStructures(AppCtx *user)
 
   /* set up auxilliary vector for output */
   dofs = (PetscInt)(sizeof(Auxfield)/sizeof(PetscReal));
-  ierr = DMDACreate2d(user->comm,DMDA_BOUNDARY_NONE,DMDA_BOUNDARY_NONE,
+  ierr = DMDACreate2d(user->comm,DM_BOUNDARY_NONE,DM_BOUNDARY_NONE,
 		      DMDA_STENCIL_BOX,p->ni,p->nj,PETSC_DECIDE,PETSC_DECIDE,
 		      dofs,0,PETSC_NULL,PETSC_NULL,&user->da_aux);CHKERRQ(ierr);
+  ierr = DMSetUp(user->da_aux);CHKERRQ(ierr);
   ierr = DMDASetFieldName(user->da_aux,0,"eta");CHKERRQ(ierr);
   ierr = DMDASetFieldName(user->da_aux,1,"e_2");CHKERRQ(ierr);
   ierr = DMDASetFieldName(user->da_aux,2,"beta");CHKERRQ(ierr);
@@ -200,7 +202,7 @@ PetscBool OptionsHasName(const char name[])
 {
   PetscBool retval; 
   PetscFunctionBegin;
-  PetscOptionsHasName(PETSC_NULL,name,&retval);
+  PetscOptionsHasName(NULL,PETSC_NULL,name,&retval);
   PetscFunctionReturn(retval);
 }
 

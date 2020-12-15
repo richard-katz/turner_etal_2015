@@ -16,21 +16,20 @@ int main(int argc,char **argv)
      - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */ 
   ierr = PetscInitialize(&argc,&argv,(char *)0,PETSC_NULL); CHKERRQ(ierr);
   ierr = MPI_Comm_size(PETSC_COMM_WORLD,&cs);
-  PetscOptionsSetValue("-ksp_gmres_restart","360");
-  PetscOptionsSetValue("-snes_monitor","");
-  PetscOptionsSetValue("-snes_converged_reason","");
+  PetscOptionsSetValue(NULL,"-ksp_gmres_restart","360");
+  PetscOptionsSetValue(NULL,"-snes_monitor","");
+  PetscOptionsSetValue(NULL,"-snes_converged_reason","");
   if (cs==1) {
-    PetscOptionsSetValue("-pc_type","lu");
+    PetscOptionsSetValue(NULL,"-pc_type","lu");
   } else {
     if (OptionsHasName("-mumps")) {
-      PetscOptionsSetValue("-pc_factor_mat_solver_package","mumps"); 
-      PetscOptionsSetValue("-pc_type","lu");    
+      PetscOptionsSetValue(NULL,"-pc_factor_mat_solver_type","mumps"); 
+      PetscOptionsSetValue(NULL,"-pc_type","lu");    
     } else {
-      PetscOptionsSetValue("-pc_type","asm");
-      PetscOptionsSetValue("-sub_pc_type","lu");
+      PetscOptionsSetValue(NULL,"-pc_type","asm");
+      PetscOptionsSetValue(NULL,"-sub_pc_type","lu");
     }
   }
-  PetscOptionsInsert(&argc,&argv,PETSC_NULL);
   user.comm = PETSC_COMM_WORLD;
 
  /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -163,7 +162,7 @@ PetscErrorCode DoOutput(AppCtx *user)
   if (p->output_to_file) { 
     ierr = PetscPrintf(user->comm," Generating output file: \"%s\"\n",p->output_filename);
     ierr = PetscViewerBinaryOpen(user->comm,p->output_filename,FILE_MODE_WRITE,&viewer);CHKERRQ(ierr);
-    ierr = PetscViewerSetFormat(viewer,PETSC_VIEWER_BINARY_MATLAB);CHKERRQ(ierr);
+    ierr = PetscViewerPushFormat(viewer,PETSC_VIEWER_BINARY_MATLAB);CHKERRQ(ierr);
     ierr = PetscBagView(user->bag,viewer);CHKERRQ(ierr);
     ierr = PetscBagView(user->VM.bag,viewer);CHKERRQ(ierr);
     ierr = VecView(user->X,viewer);CHKERRQ(ierr);

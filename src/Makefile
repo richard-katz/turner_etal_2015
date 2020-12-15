@@ -11,10 +11,9 @@ all:	${PROG}
 
 debug:  ${PROG}
 
-include ${PETSC_DIR}/conf/variables
-include ${PETSC_DIR}/conf/rules
+include ${PETSC_DIR}/lib/petsc/conf/variables
+include ${PETSC_DIR}/lib/petsc/conf/rules
 
-
-${PROG}: ${OBJECTS} chkopts
+${PROG}: ${OBJECTS}
 	${RM} ${PROG} ${CFLAGS}
-	-${CLINKER} -o ${PROG} ${OBJECTS} ${PETSC_SNES_LIB} ${PETSC_CONTRIB}
+	-${CLINKER} -o ${PROG} ${OBJECTS} ${PETSC_SNES_LIB}
